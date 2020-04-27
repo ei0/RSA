@@ -3,33 +3,33 @@
 #include<fstream>
 #include<iostream>
 
-#include<boost/multiprecision/cpp_int.hpp>//´óÊý
-#include<boost/multiprecision/random.hpp>//Ëæ»úÊý
-#include<boost/multiprecision/miller_rabin.hpp>//ËØÐÔ¼ì²â
+#include<boost/multiprecision/cpp_int.hpp>//ï¿½ï¿½ï¿½ï¿½
+#include<boost/multiprecision/random.hpp>//ï¿½ï¿½ï¿½ï¿½ï¿½
+#include<boost/multiprecision/miller_rabin.hpp>//ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½
 
 using std::cin;
 using std::cout;
 using std::endl;
 #define NUMBER 256
-static int64_t tr_or_fa = 0;//ÈôÒòÎó²îµ¼ÖÂ´íÎó£¬ÓÉ´Ë±ê¼Ç±¨³ö£¬true_or_false
+static int64_t tr_or_fa = 0;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½îµ¼ï¿½Â´ï¿½ï¿½ï¿½ï¿½É´Ë±ï¿½Ç±ï¿½ï¿½ï¿½ï¿½ï¿½true_or_false
 typedef boost::multiprecision::int1024_t DataType;
 struct key {
-	DataType m_ekey;//¼ÓÃÜÃÜÔ¿¹«Ô¿
-	DataType m_dkey;//½âÃÜÃÜÔ¿Ë½Ô¿
+	DataType m_ekey;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¿ï¿½ï¿½Ô¿
+	DataType m_dkey;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¿Ë½Ô¿
 	DataType m_pkey;//n
 };
 
-class NumProcess {//Êý¾Ý´¦Àí¹¤¾ß
+class NumProcess {//ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 public:
-	static DataType gcdEx(DataType a, DataType b, DataType* x, DataType* y);//À©Õ¹Å·¼¸ÀïµÃ
-	static bool GetGcd(DataType data1, DataType data2);//×î´ó¹«Ô¼Êý£¨¸üÏà¼õËð·¨£©
+	static DataType gcdEx(DataType a, DataType b, DataType* x, DataType* y);//ï¿½ï¿½Õ¹Å·ï¿½ï¿½ï¿½ï¿½ï¿½
+	static bool GetGcd(DataType data1, DataType data2);//ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ð·¨£ï¿½
 };
  DataType NumProcess::gcdEx(DataType a, DataType b, DataType* x, DataType* y)
 {
 	if (b == 0)
 	{
 		*x = 1, * y = 0;
-		return *x > * y ? *x : *y;
+		return a;
 	}
 	else
 	{
@@ -39,8 +39,8 @@ public:
 		*x = *y;
 		*y = t - a / b * *y;
 		return gcd;
-	}//À©Õ¹Å·¼¸ÀïµÃ
-}//À©Õ¹Å·¼¸ÀïµÃ
+	}//ï¿½ï¿½Õ¹Å·ï¿½ï¿½ï¿½ï¿½ï¿½
+}//ï¿½ï¿½Õ¹Å·ï¿½ï¿½ï¿½ï¿½ï¿½
  bool NumProcess::GetGcd(DataType data1, DataType data2) {
 	//clock_t start, end;
 	//start = clock();
@@ -57,40 +57,40 @@ public:
 	}
 	if (data1 == 1) {
 		//end = clock();
-		//cout << "×î´ó¹«Ô¼ÊýTIMEs£º" << (end - start) / CLOCKS_PER_SEC << 's' << endl;
+		//cout << "ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½TIMEsï¿½ï¿½" << (end - start) / CLOCKS_PER_SEC << 's' << endl;
 		return true;
 
 	}
 	else {
 		//end = clock();
-		//cout << "×î´ó¹«Ô¼ÊýTIMEs£º" << (end - start) / CLOCKS_PER_SEC << 's' << endl;
+		//cout << "ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½TIMEsï¿½ï¿½" << (end - start) / CLOCKS_PER_SEC << 's' << endl;
 		return false;
 	}
-}//×î´ó¹«Ô¼Êý
+}//ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½
 
 
 
-class RSA {//¼Ó½âÃÜÄ£¿é
+class RSA {//ï¿½Ó½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
 	key m_key;
 public:
 	RSA();
 	//a^b%n
-	void encipher(const char* filename, const char* fileout);//¶ÔÎÄ¼þ¼ÓÃÜ
-	void decrypt(const char* filename, const char* fileout);//¶ÔÎÄ¼þ½âÃÜ
-	DataType encipher(DataType data);//¶ÔÊý¾Ý¼ÓÃÜ
-	DataType decrypt(DataType data);//¶ÔÊý¾Ý½âÃÜ
-	key getallkey();//·µ»Ø¹«Ë½ÃÜÔ¿
+	void encipher(const char* filename, const char* fileout);//ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
+	void decrypt(const char* filename, const char* fileout);//ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
+	DataType encipher(DataType data);//ï¿½ï¿½ï¿½ï¿½ï¿½Ý¼ï¿½ï¿½ï¿½
+	DataType decrypt(DataType data);//ï¿½ï¿½ï¿½ï¿½ï¿½Ý½ï¿½ï¿½ï¿½
+	key getallkey();//ï¿½ï¿½ï¿½Ø¹ï¿½Ë½ï¿½ï¿½Ô¿
 private:
 	//key GetKeys();
-	//²úÉú¹«Ô¿Ë½Ô¿Á÷³Ì
-	DataType GetPrime();//µÃµ½ËØÊý
-	bool isprime(DataType data);//ÅÐ¶ÏËØÊý
-	DataType GetPkey(DataType prime1, DataType prime2);//µÃµ½¹²ÓÐ²¿·Ö
-	DataType GetOrla(DataType prime1, DataType prime2);//Å·À­¹«Ê½
-	DataType GetEkey(DataType orla);//¹«Ô¿µÄË½ÓÐ²¿·Ö
-	DataType GetDkey(DataType ekey, DataType orla);//Ë½Ô¿µÄË½ÓÐ²¿·Ö
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¿Ë½Ô¿ï¿½ï¿½ï¿½ï¿½
+	DataType GetPrime();//ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½
+	bool isprime(DataType data);//ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½
+	DataType GetPkey(DataType prime1, DataType prime2);//ï¿½Ãµï¿½ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½
+	DataType GetOrla(DataType prime1, DataType prime2);//Å·ï¿½ï¿½ï¿½ï¿½Ê½
+	DataType GetEkey(DataType orla);//ï¿½ï¿½Ô¿ï¿½ï¿½Ë½ï¿½Ð²ï¿½ï¿½ï¿½
+	DataType GetDkey(DataType ekey, DataType orla);//Ë½Ô¿ï¿½ï¿½Ë½ï¿½Ð²ï¿½ï¿½ï¿½
 };
-RSA::RSA() {//Éú³É¹«Ô¿Ë½Ô¿
+RSA::RSA() {//ï¿½ï¿½ï¿½É¹ï¿½Ô¿Ë½Ô¿
 	DataType prime1 = GetPrime();
 	DataType prime2 = GetPrime();
 	while (prime1 == prime2)
@@ -104,7 +104,7 @@ RSA::RSA() {//Éú³É¹«Ô¿Ë½Ô¿
 	m_key.m_dkey = GetDkey(m_key.m_ekey, orla);
 	//cout << "DK OK!" << endl;
 }
-void RSA::encipher(const char* filename, const char* fileout) {//¶ÔÎÄ¼þ½øÐÐ¼ÓÃÜ
+void RSA::encipher(const char* filename, const char* fileout) {//ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½
 	std::ifstream fin(filename, std::ios::binary);
 	std::ofstream fout(fileout, std::ios::binary);
 	if (!fin.is_open()) {
@@ -121,7 +121,7 @@ void RSA::encipher(const char* filename, const char* fileout) {//¶ÔÎÄ¼þ½øÐÐ¼ÓÃÜ
 			return;
 		}*/
 		int curNum = fin.gcount();
-		cout << "¼ÓÃÜ¡ª¡ª¶ÁÈ¡ÁË¶àÉÙÊý" << curNum << endl;
+		cout << "ï¿½ï¿½ï¿½Ü¡ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½Ë¶ï¿½ï¿½ï¿½ï¿½ï¿½" << curNum << endl;
 		for (int i = 0; i < curNum; i++) {
 			bufout[i] = encipher((DataType)bufin[i]);
 		}
@@ -138,7 +138,7 @@ void RSA::encipher(const char* filename, const char* fileout) {//¶ÔÎÄ¼þ½øÐÐ¼ÓÃÜ
 	fout.close();
 }
 
-void RSA::decrypt(const char* filename, const char* fileout) {//¶ÔÎÄ¼þ½øÐÐ½âÃÜ
+void RSA::decrypt(const char* filename, const char* fileout) {//ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ð½ï¿½ï¿½ï¿½
 	std::ifstream fin(filename, std::ios::binary);
 	std::ofstream fout(fileout, std::ios::binary);
 	if (!fin.is_open()) {
@@ -157,7 +157,7 @@ void RSA::decrypt(const char* filename, const char* fileout) {//¶ÔÎÄ¼þ½øÐÐ½âÃÜ
 			return;
 		}*/
 		int num = fin.gcount();
-		cout <<" ½âÃÜ¡ª¡ª¶ÁÈ¡ÁË¶àÉÙ"<<num << endl;
+		cout <<" ï¿½ï¿½ï¿½Ü¡ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½Ë¶ï¿½ï¿½ï¿½"<<num << endl;
 		num /= sizeof(DataType);
 		for (int i = 0; i < num; i++) {
 			bufout[i] = (char)decrypt(bufin[i]);
@@ -171,14 +171,14 @@ void RSA::decrypt(const char* filename, const char* fileout) {//¶ÔÎÄ¼þ½øÐÐ½âÃÜ
 	}
 	if (sum != tr_or_fa) {
 		cout << endl;
-		cout << "ÓÉÓÚ¸ßÐ§µÄ´óÊýËØÐÔµ¼ÖÂ¼«Ð¡¸ÅÂÊµÄ³ö´í£¬ÇëÖØÐÂÉú³ÉÃÜÔ¿½øÐÐ¼ÓÃÜ£¡" << endl;
+		cout << "ï¿½ï¿½ï¿½Ú¸ï¿½Ð§ï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôµï¿½ï¿½Â¼ï¿½Ð¡ï¿½ï¿½ï¿½ÊµÄ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½Ü£ï¿½" << endl;
 	}
 	delete[] bufin;
 	delete[] bufout;
 	fout.close();
 	fin.close();
 }
-DataType RSA::encipher(DataType data) {//¶ÔÊý¾Ý½øÐÐ¼ÓÃÜ
+DataType RSA::encipher(DataType data) {//ï¿½ï¿½ï¿½ï¿½ï¿½Ý½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½
 	//return (DataType)pow(data, ekey) % pkey;
 	DataType Ai = data;
 	DataType msgE = 1;
@@ -191,7 +191,7 @@ DataType RSA::encipher(DataType data) {//¶ÔÊý¾Ý½øÐÐ¼ÓÃÜ
 	}
 	return msgE;
 }
-DataType RSA::decrypt(DataType data) {//¶ÔÊý¾Ý½øÐÐ½âÃÜ
+DataType RSA::decrypt(DataType data) {//ï¿½ï¿½ï¿½ï¿½ï¿½Ý½ï¿½ï¿½Ð½ï¿½ï¿½ï¿½
 	DataType Ai = data;
 	DataType msgE = 1;
 	while (m_key.m_dkey)
@@ -204,12 +204,12 @@ DataType RSA::decrypt(DataType data) {//¶ÔÊý¾Ý½øÐÐ½âÃÜ
 	return msgE;
 	//return encipher(data, dkey, pkey);
 }
-key RSA::getallkey() {//µÃµ½¹«Ô¿Ë½Ô¿
+key RSA::getallkey() {//ï¿½Ãµï¿½ï¿½ï¿½Ô¿Ë½Ô¿
 	return m_key;
 }
 
 
-DataType RSA::GetPrime() {//µÃµ½Ò»¸öËØÊý
+DataType RSA::GetPrime() {//ï¿½Ãµï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	//srand(time(NULL));
 
 	//clock_t start, end;
@@ -220,7 +220,7 @@ DataType RSA::GetPrime() {//µÃµ½Ò»¸öËØÊý
 	DataType prime;
 	while (1) {
 		prime = dist(gen);
-		//cout << "rand£º" << endl;
+		//cout << "randï¿½ï¿½" << endl;
 		//cout << prime << endl;
 		if (isprime(prime))
 			break;
@@ -229,7 +229,7 @@ DataType RSA::GetPrime() {//µÃµ½Ò»¸öËØÊý
 	//cout << "Get prime time: " << (end - start) / CLOCKS_PER_SEC << 's' << endl;
 	return prime;
 }
-bool RSA::isprime(DataType data) {//ÅÐ¶ÏÒ»¸öÊýÊÇ·ñÎªËØÊý
+bool RSA::isprime(DataType data) {//ï¿½Ð¶ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½ï¿½
 	/*if (data <= 0) {
 		return false;
 	}
@@ -250,14 +250,14 @@ bool RSA::isprime(DataType data) {//ÅÐ¶ÏÒ»¸öÊýÊÇ·ñÎªËØÊý
 
 }
 //n = pq
-DataType RSA::GetPkey(DataType prime1, DataType prime2) {//¹«Ô¿ÓëË½Ô¿µÄ¹²ÓÐ²¿·ÖµÄ²úÉú
+DataType RSA::GetPkey(DataType prime1, DataType prime2) {//ï¿½ï¿½Ô¿ï¿½ï¿½Ë½Ô¿ï¿½Ä¹ï¿½ï¿½Ð²ï¿½ï¿½ÖµÄ²ï¿½ï¿½ï¿½
 	return prime1 * prime2;
 }
 //f(n) = (p-1)(q-1)
 DataType RSA::GetOrla(DataType prime1, DataType prime2) {
 	return (prime1 - 1) * (prime2 - 1);
 }
-DataType RSA::GetEkey(DataType orla) {//´«ÈëÅ·À­¹«Ê½½á¹û£¬¹«Ô¿¶ÀÁ¢²¿·ÖµÄ²úÉú
+DataType RSA::GetEkey(DataType orla) {//ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÖµÄ²ï¿½ï¿½ï¿½
 	//srand(time(NULL));
 
 	boost::random::mt19937 gen(time(NULL));
@@ -267,12 +267,12 @@ DataType RSA::GetEkey(DataType orla) {//´«ÈëÅ·À­¹«Ê½½á¹û£¬¹«Ô¿¶ÀÁ¢²¿·ÖµÄ²úÉú
 	while (1) {
 		//ekey = rand() % orla + 2;
 		ekey = dist(gen);
-		if (NumProcess::GetGcd(ekey, orla)) {//Í¨¹ýÅÐ¶ÏÁ½ÊýµÄ×î´ó¹«Ô¼ÊýÊÇ·ñÎª1 -> ÅÐ¶ÏÁ½ÊýÊÇ·ñ»¥ÖÊ
+		if (NumProcess::GetGcd(ekey, orla)) {//Í¨ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½Ç·ï¿½Îª1 -> ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½
 			return ekey;
 		}
 	}
 }
-DataType RSA::GetDkey(DataType ekey, DataType orla) {//Çó½âË½Ô¿ÖÐµÄË½ÓÐ²¿·Ö
+DataType RSA::GetDkey(DataType ekey, DataType orla) {//ï¿½ï¿½ï¿½Ë½Ô¿ï¿½Ðµï¿½Ë½ï¿½Ð²ï¿½ï¿½ï¿½
 	//DataType dkey = orla / ekey;
 	//while (1) {
 	//	if ((dkey * ekey) % orla == 1) {
@@ -283,20 +283,22 @@ DataType RSA::GetDkey(DataType ekey, DataType orla) {//Çó½âË½Ô¿ÖÐµÄË½ÓÐ²¿·Ö
 
 	//clock_t start, end;
 	//start = clock();
-	DataType num1 = 1, num2 = 1;
+	//DataType num1 = 1, num2 = 1;
+	//NumProcess::gcdEx(ekey, orla, &num1, &num2);
+//	if ((num1 * ekey) % orla == 1) {
+		//end = clock();
+		//cout << "ï¿½ï¿½Õ¹gcd-TIMEsï¿½ï¿½" << (end - start) / CLOCKS_PER_SEC << 's' << endl;
+	//	return num1;
+	//}
+
+	//else /*if ((num2 * ekey) % orla == 1)*/ {
+		//end = clock();
+		//cout << "ï¿½ï¿½Õ¹gcd-TIMEsï¿½ï¿½" << (end - start) / CLOCKS_PER_SEC << 's' << endl;
+	//	return num2;
+	//}
+	DataType num1 = 0, num2 = 0;
 	NumProcess::gcdEx(ekey, orla, &num1, &num2);
-	if ((num1 * ekey) % orla == 1) {
-		//end = clock();
-		//cout << "À©Õ¹gcd-TIMEs£º" << (end - start) / CLOCKS_PER_SEC << 's' << endl;
-		return num1;
-	}
-
-	else /*if ((num2 * ekey) % orla == 1)*/ {
-		//end = clock();
-		//cout << "À©Õ¹gcd-TIMEs£º" << (end - start) / CLOCKS_PER_SEC << 's' << endl;
-		return num2;
-	}
-
+	return (num1 % orla + orla) % orla;
 
 }
 
